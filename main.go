@@ -46,7 +46,7 @@ func main() {
 	})
 
 	// GET Event Detail
-	http.HandleFunc("/event/{id}", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/events/{id}", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
 			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 			return
