@@ -5,18 +5,9 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"time"
-)
 
-type Event struct {
-	ID          int       `json:"id"`
-	Title       string    `json:"title"`
-	Venue       string    `json:"venue"`
-	City        string    `json:"city"`
-	StartsAt    time.Time `json:"startsAt"`
-	ImageURL    string    `json:"imageUrl"`
-	Description string    `json:"description"`
-}
+	"ticketswap-go/internal/events"
+)
 
 const address = ":8080"
 
@@ -33,7 +24,7 @@ func main() {
 			return
 		}
 
-		events := []Event{
+		events := []events.Event{
 			{
 				ID:    1,
 				Title: "lowlands",
@@ -60,7 +51,7 @@ func main() {
 			return
 		}
 
-		event := Event{
+		event := events.Event{
 			ID:    id,
 			Title: "lowlands",
 			City:  "Biddinghuizen",
