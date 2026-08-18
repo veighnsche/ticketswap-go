@@ -1,12 +1,15 @@
 package events
 
 import (
+	"database/sql"
 	"encoding/json"
 	"net/http"
 	"strconv"
 )
 
-type Handler struct{}
+type Handler struct {
+	DB *sql.DB
+}
 
 func (h Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /events", h.list)
