@@ -6,6 +6,12 @@ import (
 	"net/http"
 )
 
+type Event struct {
+	ID    int    `json:"id"`
+	Title string `json:"title"`
+	City  string `json:"city"`
+}
+
 const address = ":8080"
 
 func main() {
@@ -18,11 +24,11 @@ func main() {
 			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		}
 
-		events := []map[string]any{
+		events := []Event{
 			{
-				"id":    0,
-				"title": "lowlands",
-				"city":  "Biddinghuizen",
+				ID:    1,
+				Title: "lowlands",
+				City:  "Biddinghuizen",
 			},
 		}
 
