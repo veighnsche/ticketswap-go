@@ -3,17 +3,15 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"ticketswap-go/internal/database"
 	"ticketswap-go/internal/events"
 )
 
-const address = ":8080"
-const postgresURI = "postgres://ticketswap:localdev@localhost:5432/ticketswap?sslmode=disable"
-
 func main() {
 	mux := http.NewServeMux()
 
-	db, err := database.OpenPostgres(postgresURI)
+	db, err := database.OpenPostgres(os.Getenv("DATABASE_URL"))
 	if err != nil {
 		fmt.Println("failed to open Postgres:", err)
 		return
@@ -35,6 +33,8 @@ func main() {
 	 * START THE SERVER
 	 * ---
 	 */
+
+	address := os.Getenv("SERVER_PORT")
 
 	fmt.Printf("server started at http://localhost%s\n", address)
 
