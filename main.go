@@ -5,12 +5,17 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 type Event struct {
-	ID    int    `json:"id"`
-	Title string `json:"title"`
-	City  string `json:"city"`
+	ID          int       `json:"id"`
+	Title       string    `json:"title"`
+	Venue       string    `json:"venue"`
+	City        string    `json:"city"`
+	StartsAt    time.Time `json:"startsAt"`
+	ImageURL    string    `json:"imageUrl"`
+	Description string    `json:"description"`
 }
 
 const address = ":8080"
