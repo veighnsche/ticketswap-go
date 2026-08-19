@@ -3,6 +3,7 @@ package events
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 )
@@ -24,14 +25,14 @@ func (h *Handler) create(w http.ResponseWriter, r *http.Request) {
 	var event Event
 
 	if err := json.NewDecoder(r.Body).Decode(&event); err != nil {
-		// missing: err from repo method is discarded
+		fmt.Println("request body must be valid JSON:", err)
 		http.Error(w, "request body must be valid JSON", http.StatusBadRequest)
 		return
 	}
 
 	repo := Repository{DB: h.DB}
 	if err := repo.Create(r.Context(), &event); err != nil {
-		// missing: err from repo method is discarded
+		fmt.Println("could not create event:", err)
 		http.Error(w, "could not create event", http.StatusInternalServerError)
 		return
 	}
@@ -48,7 +49,7 @@ func (h *Handler) list(w http.ResponseWriter, r *http.Request) {
 	repo := Repository{DB: h.DB}
 	events, err := repo.List(r.Context())
 	if err != nil {
-		// missing: err from repo method is discarded
+		fmt.Println("could not list events:", err)
 		http.Error(w, "could not list events", http.StatusInternalServerError)
 		return
 	}
@@ -58,13 +59,13 @@ func (h *Handler) list(w http.ResponseWriter, r *http.Request) {
 }
 
 // GET /events/{id}
-// future: makes sense if the event detail item has more details than the list item
+// future: makes sense if the event detail item has more details than the list itm
 func (h *Handler) get(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
-		// missing: err from repo method is discarded
+		fmt.Println("id cannot be converted to a number:", err)
 		http.Error(w, "id cannot be converted to a number", http.StatusBadRequest)
 		return
 	}

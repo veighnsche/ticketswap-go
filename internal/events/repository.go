@@ -46,6 +46,7 @@ func (r Repository) List(ctx context.Context) ([]Event, error) {
 			&event.City,
 			&event.StartsAt,
 			&event.ImageURL,
+			&event.Description,
 		); err != nil {
 			return nil, err
 		}
