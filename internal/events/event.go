@@ -15,7 +15,7 @@ type Event struct {
 	Description string    `json:"description"`
 }
 
-func (e Event) createValidator() error {
+func (e Event) CreateValidator() error {
 	if e.Title == "" {
 		return errors.New("missing title to create event")
 	}

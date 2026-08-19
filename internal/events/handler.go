@@ -30,7 +30,7 @@ func (h *Handler) create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := event.createValidator(); err != nil {
+	if err := event.CreateValidator(); err != nil {
 		message := fmt.Errorf("incomplete event body for creation: %w", err)
 		http.Error(w, message.Error(), http.StatusBadRequest)
 		return
