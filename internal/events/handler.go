@@ -19,11 +19,20 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 }
 
 // POST /events
+// missing: validator
 func (h *Handler) create(w http.ResponseWriter, r *http.Request) {
 	var event Event
 
 	if err := json.NewDecoder(r.Body).Decode(&event); err != nil {
+		// missing: err from repo method is discarded
 		http.Error(w, "request body must be valid JSON", http.StatusBadRequest)
+		return
+	}
+
+	repo := Repository{DB: h.DB}
+	if err := repo.Create(r.Context(), &event); err != nil {
+		// missing: err from repo method is discarded
+		http.Error(w, "could not create event", http.StatusInternalServerError)
 		return
 	}
 
@@ -33,13 +42,15 @@ func (h *Handler) create(w http.ResponseWriter, r *http.Request) {
 }
 
 // GET /events
+// missing: filters, paginator
+// future: makes sense if the event list item has less data than the detail item
 func (h *Handler) list(w http.ResponseWriter, r *http.Request) {
-	events := []Event{
-		{
-			ID:    1,
-			Title: "lowlands",
-			City:  "Biddinghuizen",
-		},
+	repo := Repository{DB: h.DB}
+	events, err := repo.List(r.Context())
+	if err != nil {
+		// missing: err from repo method is discarded
+		http.Error(w, "could not list events", http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -47,11 +58,13 @@ func (h *Handler) list(w http.ResponseWriter, r *http.Request) {
 }
 
 // GET /events/{id}
+// future: makes sense if the event detail item has more details than the list item
 func (h *Handler) get(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 
-	id, err := strconv.Atoi(idStr)
+	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
+		// missing: err from repo method is discarded
 		http.Error(w, "id cannot be converted to a number", http.StatusBadRequest)
 		return
 	}

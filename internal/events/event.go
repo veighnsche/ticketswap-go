@@ -3,7 +3,7 @@ package events
 import "time"
 
 type Event struct {
-	ID          int       `json:"id"`
+	ID          int64     `json:"id"`
 	Title       string    `json:"title"`
 	Venue       string    `json:"venue"`
 	City        string    `json:"city"`
