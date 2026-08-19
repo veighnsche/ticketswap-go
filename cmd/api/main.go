@@ -9,7 +9,11 @@ import (
 )
 
 func main() {
-	mux := http.NewServeMux()
+	address := os.Getenv("SERVER_PORT")
+	if address == "" {
+		fmt.Println("SEVER_PORT env var is not set")
+		return
+	}
 
 	db, err := database.OpenPostgres(os.Getenv("DATABASE_URL"))
 	if err != nil {
@@ -17,6 +21,14 @@ func main() {
 		return
 	}
 	defer db.Close()
+
+	/*
+	 * ---
+	 * SETUP MUX
+	 * ---
+	 */
+
+	mux := http.NewServeMux()
 
 	// GET Health
 	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
@@ -33,8 +45,6 @@ func main() {
 	 * START THE SERVER
 	 * ---
 	 */
-
-	address := os.Getenv("SERVER_PORT")
 
 	fmt.Printf("server started at http://localhost%s\n", address)
 

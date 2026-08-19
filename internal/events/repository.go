@@ -28,6 +28,7 @@ func (r Repository) List(ctx context.Context) ([]Event, error) {
 	rows, err := r.DB.QueryContext(ctx, `
 		SELECT id, title, venue, city, starts_at, image_url, description
 		FROM events
+		ORDER BY starts_at
 		`)
 	if err != nil {
 		return nil, err
@@ -73,8 +74,10 @@ func (r Repository) Get(ctx context.Context, id int64) (Event, error) {
 		&event.ImageURL,
 		&event.Description)
 
+	
+
 	if err != nil {
-		return Event{}, nil
+		return Event{}, err
 	}
 
 	return event, nil
