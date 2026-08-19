@@ -25,8 +25,14 @@ func (h *Handler) create(w http.ResponseWriter, r *http.Request) {
 	var event Event
 
 	if err := json.NewDecoder(r.Body).Decode(&event); err != nil {
-		fmt.Println("request body must be valid JSON:", err)
-		http.Error(w, "request body must be valid JSON", http.StatusBadRequest)
+		message := fmt.Errorf("request body must be valid JSON: %w", err)
+		http.Error(w, message.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if err := event.createValidator(); err != nil {
+		message := fmt.Errorf("incomplete event body for creation: %w", err)
+		http.Error(w, message.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -65,8 +71,8 @@ func (h *Handler) get(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
-		fmt.Println("id cannot be converted to a number:", err)
-		http.Error(w, "id cannot be converted to a number", http.StatusBadRequest)
+		message := fmt.Errorf("id cannot be converted to a number: %w", err)
+		http.Error(w, message.Error(), http.StatusBadRequest)
 		return
 	}
 
