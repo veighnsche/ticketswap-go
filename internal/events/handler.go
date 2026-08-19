@@ -70,10 +70,12 @@ func (h *Handler) get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	event := Event{
-		ID:    id,
-		Title: "lowlands",
-		City:  "Biddinghuizen",
+	repo := Repository{DB: h.DB}
+	event, err := repo.Get(r.Context(), id)
+	if err != nil {
+		fmt.Println("could not get event:", err)
+		http.Error(w, "could not get event", http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")

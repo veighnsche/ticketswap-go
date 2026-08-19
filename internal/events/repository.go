@@ -56,3 +56,26 @@ func (r Repository) List(ctx context.Context) ([]Event, error) {
 
 	return events, rows.Err()
 }
+
+func (r Repository) Get(ctx context.Context, id int64) (Event, error) {
+	var event Event
+
+	err := r.DB.QueryRowContext(ctx, `
+		SELECT id, title, venue, city, starts_at, image_url, description
+		FROM events
+		WHERE id = $1
+		`, id).Scan(
+		&event.ID,
+		&event.Title,
+		&event.Venue,
+		&event.City,
+		&event.StartsAt,
+		&event.ImageURL,
+		&event.Description)
+
+	if err != nil {
+		return Event{}, nil
+	}
+
+	return event, nil
+}
