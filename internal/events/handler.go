@@ -48,7 +48,7 @@ func (h *Handler) create(w http.ResponseWriter, r *http.Request) {
 }
 
 // GET /events
-// missing: filters, paginator
+// missing: filters, search, paginator
 // future: makes sense if the event list item has less data than the detail item
 func (h *Handler) list(w http.ResponseWriter, r *http.Request) {
 	repo := Repository{DB: h.DB}
