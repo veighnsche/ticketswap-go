@@ -20,7 +20,6 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 }
 
 // POST /events
-// missing: validator
 func (h *Handler) create(w http.ResponseWriter, r *http.Request) {
 	var event Event
 
