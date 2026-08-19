@@ -74,8 +74,6 @@ func (r Repository) Get(ctx context.Context, id int64) (Event, error) {
 		&event.ImageURL,
 		&event.Description)
 
-	
-
 	if err != nil {
 		return Event{}, err
 	}
